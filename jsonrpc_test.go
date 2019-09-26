@@ -3,6 +3,7 @@ package cursedjsonrpc
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -101,6 +102,9 @@ func TestRpcClient_Call(t *testing.T) {
 
 	rpcClient.Call("stringParams", "JSON", "RPC")
 	Expect((<-requestChan).body).To(Equal(`{"method":"stringParams","params":["JSON","RPC"],"id":0,"jsonrpc":"2.0"}`))
+
+	rpcClient.Call("nanParam", math.NaN())
+	Expect((<-requestChan).body).To(Equal(`{"method":"nanParam","params":[NaN],"id":0,"jsonrpc":"2.0"}`))
 
 	rpcClient.Call("numberParam", 123)
 	Expect((<-requestChan).body).To(Equal(`{"method":"numberParam","params":[123],"id":0,"jsonrpc":"2.0"}`))
@@ -484,6 +488,16 @@ func TestRpcJsonResponseStruct(t *testing.T) {
 	b, err = res.GetBool()
 	Expect(err).To(BeNil())
 	Expect(b).To(Equal(true))
+
+	f := 0.0
+	responseBody = `{ "result": Infinity }`
+	res, err = rpcClient.Call("something", 1, 2, 3)
+	<-requestChan
+	Expect(err).To(BeNil())
+	Expect(res.Error).To(BeNil())
+	f, err = res.GetFloat()
+	Expect(err).To(BeNil())
+	Expect(f).To(Equal(math.Inf(1.0)))
 
 	b = true
 	responseBody = `{ "result": 123 }`
