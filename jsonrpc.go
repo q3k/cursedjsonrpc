@@ -1,5 +1,5 @@
-// Package jsonrpc provides a JSON-RPC 2.0 client that sends JSON-RPC requests and receives JSON-RPC responses using HTTP.
-package jsonrpc
+// Package cursedjsonrpc provides a JSON-RPC 2.0 client that sends JSON-RPC requests and receives JSON-RPC responses using HTTP.
+package cursedjsonrpc
 
 import (
 	"bytes"

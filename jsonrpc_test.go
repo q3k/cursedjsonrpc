@@ -1,4 +1,4 @@
-package jsonrpc
+package cursedjsonrpc
 
 import (
 	"fmt"
