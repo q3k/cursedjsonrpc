@@ -1,4 +1,4 @@
-module jsonrpc
+module cursedjsonrpc
 
 go 1.12
 
